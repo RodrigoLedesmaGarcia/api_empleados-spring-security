@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar, Eliminar Empleado</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</head>
+<body>
+<!-- navbar -->
+<nav class="navbar navbar-expand-lg bg-secondary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/icono.ico}" alt="Logo" width="40" height="40">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        </div>
+    </div>
+</nav>
+
+<!-- cuerpo -->
+<div class="container">
+ <div class="card shadow-sm border-0">
+     <div class="card-body">
+
+         <h2 class="text-center mb-4" >Buscar empleado por número de empleado</h2>
+         <form th:action="@{/employee/buscar}" method="get" class="row g-3 mb-4">
+             <div class="col-md-3">
+                 <label class="form-label">Ingrese el número de empleado</label>
+                 <input type="number" name="empNo" class="form-control" placeholder="ejemplo: 10010" required>
+             </div>
+
+             <div class="col-md-2 d-flex align-items-end">
+                 <button type="submit" class="btn btn-primary w-100" >Buscar</button>
+             </div>
+         </form>
+
+         <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+         <div class="alert alert-warning" th:if="${mensaje}" th:text="${mensanje}"></div>
+         <div class="alert alert-success" th:if="${param.editado}">Empleado editado con exito ✅</div>
+         <div class="alert alert-" th:if="${param.eliminado}">Empleado eliminado con exito ✅</div>
+
+         <div th:if="${results != null}">
+             <table class="table table-bordered table-hover">
+                 <thead class="table-dark">
+                    <tr>
+                        <th>N° Empleado</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Género</th>
+                        <th>Nacimiento</th>
+                        <th>Contratación</th>
+                        <th>Departamento</th>
+                        <th>Desde</th>
+                        <th>Hasta</th>
+                        <th class="text-center" >Acciones</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    <tr>
+                        <td th:text="${results.empNo}"></td>
+                        <td th:text="${results.firstName}"></td>
+                        <td th:text="${results.lastName}"></td>
+                        <td th:text="${results.gender}"></td>
+                        <td th:text="${results.birthDate}"></td>
+                        <td th:text="${results.hireDate}"></td>
+                        <td th:text="${results.deptNo}"></td>
+                        <td th:text="${results.fromDate}"></td>
+                        <td th:text="${results.toDate}"></td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a th:href="@{/employee/editar/{empNo}(empNo=${results.empNo})}" class="btn btn-warning btn-sm">
+                                    Editar
+                                </a>
+                                <form th:action="@{/employee/eliminar/{empNo}(empNo=${results.empNo})}"
+                                      method="post"
+                                      class="m-0"
+                                      onsubmit="return confirm('¿Seguro que quiere eliminar este empleado?')">
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                 </tbody>
+             </table>
+         </div>
+     </div>
+ </div>
+</div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+</html>

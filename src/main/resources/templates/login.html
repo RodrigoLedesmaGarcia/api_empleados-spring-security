@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+</head>
+
+<style>
+    body{
+        min-height: 100vh;
+        margin: 0;
+
+        background: url('/images/yuri.png') no-repeat center center;
+        background-size: cover;
+    }
+
+    /* Overlay para mejorar contraste */
+    body::before{
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        z-index: -1;
+    }
+
+    .login-card{
+        width: 100%;
+        max-width: 400px;
+        border-radius: 20px;
+
+        background: rgba(255, 255, 255, 0.15);
+
+        /* efecto glass */
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        border: 1px solid rgba(255,255,255,0.2);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .login-card .card-body{
+        padding: 2rem;
+    }
+
+    .login-title {
+        font-weight: 700;
+        color: #ffffff; /* blanco porque fondo es oscuro */
+    }
+
+    .login-subtitle{
+        color: #e9ecef;
+    }
+
+    .form-label{
+        color: #ffffff;
+    }
+
+    .form-control{
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.3);
+        color: #fff;
+    }
+
+    .form-control::placeholder{
+        color: #dee2e6;
+    }
+
+    .form-control:focus{
+        background: rgba(255,255,255,0.3);
+        color: #fff;
+        box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+    }
+
+    .btn-login {
+        border-radius: 12px;
+        padding: 0.75rem;
+        font-weight: 600;
+    }
+
+    .login-icon {
+        width: 70px;
+        height: 70px;
+        background-color: rgba(255,255,255,0.2);
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin: 0 auto 1rem auto;
+    }
+</style>
+<body class="d-flex align-items-center justify-content-center">
+
+<div class="card shadow-lg login-card">
+    <div class="card-body">
+        <div class="text-center mb-4">
+            <div class="login-icon">
+                👤
+            </div>
+            <h2 class="login-title mb-1">Bienvenido</h2>
+            <p class="login-subtitle mb-0">Ingrese sus credenciales para continuar</p>
+        </div>
+
+        <div class="alert alert-danger text-center"  th:if="${error}" th:text="${error}"></div>
+
+        <form method="post" th:action="@{/auth/login}">
+            <div class="mb-3">
+                <label for="username" class="form-label fw-semibold">Usuario</label>
+                <input id="username" type="text" name="username" class="form-control" placeholder="ingrese su usuario" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label fw-semiboold">Contraseña</label>
+                <input id="password" type="password" name="password" class="form-control" placeholder="ingrese su contraseña" required>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-login" >Iniciar Sesion</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+</html>

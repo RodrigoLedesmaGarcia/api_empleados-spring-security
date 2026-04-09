@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar, Eliminar Empleado</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</head>
+<body>
+<!-- navbar -->
+<nav class="navbar navbar-expand-lg bg-secondary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/icono.ico}" alt="Logo" width="40" height="40">
+        </a>
+        <h4 class="text-center"> Sistema de consulta de empleados</h4>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        </div>
+    </div>
+</nav>
+<br>
+<!-- formulario -->
+<form method="get" class="row g-2 mb-3" th:action="@{/employee/buscar}">
+
+    <!-- N° de empleado -->
+    <div class="col-12 col-md-3">
+        <label class="form-label">N° empleado</label>
+        <input type="number" name="empNo" class="form-control" th:value="${empNo}">
+    </div>
+
+    <!-- nombre del empleado -->
+    <div class="col-12 col-md-3">
+        <label class="form-label">Nombre</label>
+        <input type="text" name="firstName" class="form-control" th:value="${firstName}">
+    </div>
+
+    <!-- apellido del empleado -->
+    <div class="col-12 col-md-3">
+        <label class="form-label">Apellido</label>
+        <input type="text" name="lastName" class="form-control" th:value="${lastName}">
+    </div>
+
+    <!-- genero -->
+    <div class="col-12 col-md-3">
+        <label class="form-control" >Género</label>
+        <select name="gender" class="form-select">
+            <option value=""  th:selected="${gender == null || gender == ''}" >Todos</option>
+            <option value="M" th:selected="${gender == 'M'}">Masculino</option>
+            <option value="F" th:selected="${gender == 'F'}">Femenino</option>
+        </select>
+    </div>
+
+    <!-- departamento -->
+    <div class="col-12 col-md-3">
+        <label class="form-control">Departamento</label>
+        <input type="text" th:value="${deptNo}" name="deptNo" class="form-control">
+    </div>
+
+    <!-- fecha de contratacion -->
+    <div class="col-12 col-md-3">
+        <label class="form-control">Contratacion (fecha)</label>
+        <input type="date" th:value="${hireDate}" name="hireDate" class="form-control">
+    </div>
+
+    <!-- fecha de nacimiento-->
+    <div class="col-12 col-md-3">
+        <label class="form-label">Cumpleaños</label>
+        <input type="date" th:value="${birthDate}" name="birthDate" class="form-control">
+    </div>
+
+    <!-- from de desde -->
+    <div class="col-12 col-md-3">
+        <label class="form-label">Desde</label>
+        <input type="date" th:value="${fromDate}" name="fromDate" class="form-control">
+    </div>
+
+    <!-- actualidad -->
+    <div class="col-12 col-md-3">
+        <label class="form-label">Actualidad</label>
+        <input type="date" th:value="${toDate}" name="toDate" class="form-control">
+    </div>
+
+    <!-- paginacion -->
+    <div class="col-12 col-md-3">
+        <label class="form-label">Página</label>
+        <input type="number" name="page" th:value="${page}" class="form-control" min="0">
+    </div>
+
+    <!-- tamaño -->
+    <div class="col-12 col-md-3">
+        <label class="form-label">Tamaño</label>
+        <input type="number" name="size" th:value="${size}" class="form-control" max="100">
+    </div>
+
+
+    <!-- botones -->
+
+    <div class="col-12 d-flex gap-2 mt-2">
+        <button type="submit" class="btn btn-primary" >Buscar</button>
+        <a th:href="@{/employees/home}" class="btn btn-outline-secondary">Limpiar</a>
+    </div>
+</form>
+
+<div class="alert alert-danger" th:if="${error}" th:text="${error}" ></div>
+
+<div th:if="${results != null}">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="text-muted small">
+            Total <span th:text="${results.totalElements}" ></span>
+            Pagina <span th:text="${results.number + 1}" ></span>
+            de <span th:text="${results.totalElements}"></span>
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <!-- anterior -->
+            <form method="get" th:action="@{/employee/buscar}" class="m-0">
+                <input type="hidden" name="empNo"      th:value="${empNo}">
+                <input type="hidden" name="birthDate"  th:value="${birthDate}">
+                <input type="hidden" name="firstName"  th:value="${firstName}">
+                <input type="hidden" name="lastName"   th:value="${lastName}">
+                <input type="hidden" name="gender"     th:value="${gender}">
+                <input type="hidden" name="hireDate"   th:value="${hireDate}">
+                <input type="hidden" name="deptNo"     th:value="${deptNo}">
+                <input type="hidden" name="fromDate"   th:value="${fromDate}">
+                <input type="hidden" name="toDate"     th:value="${toDate}">
+                <input type="hidden" name="size"       th:value="${size}">
+                <input type="hidden" name="page"       th:value="${results.number > 0 ? results.number - 1 : 0}">
+                <button class="btn btn-outline-primary btn-sm" type="submit" th:disabled="${results.first}" >Anterior</button>
+            </form>
+
+            <!-- siguiente -->
+            <form method="get" th:action="@{/employee/buscar}" class="m-0">
+                <input type="hidden" name="empNo"      th:value="${empNo}">
+                <input type="hidden" name="birthDate"  th:value="${birthDate}">
+                <input type="hidden" name="firstName"  th:value="${firstName}">
+                <input type="hidden" name="lastName"   th:value="${lastName}">
+                <input type="hidden" name="gender"     th:value="${gender}">
+                <input type="hidden" name="hireDate"   th:value="${hireDate}">
+                <input type="hidden" name="deptNo"     th:value="${deptNo}">
+                <input type="hidden" name="fromDate"   th:value="${fromDate}">
+                <input type="hidden" name="toDate"     th:value="${toDate}">
+                <input type="hidden" name="size"       th:value="${size}">
+                <input type="hidden" name="page"       th:value="${results.number + 1}">
+                <button class="btn btn-outline-primary btn-sm" type="submit" th:disabled="${results.last}" >Siguiente</button>
+            </form>
+        </div>
+
+
+        <!-- tablas -->
+        <table class="table table-sm table-stripped align-middle">
+            <thead>
+                <tr>
+                    <th>N° Empleado</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Género</th>
+                    <th>Nacimiento</th>
+                    <th>Contratacion</th>
+                    <th>Departamento</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${results.content}">
+                    <td th:text="${item.empNo}"></td>
+                    <td th:text="${item.firstName}"></td>
+                    <td th:text="${item.lastName}"></td>
+                    <td th:text="${item.gender}"></td>
+                    <td th:text="${item.birthDate}"></td>
+                    <td th:text="${item.hireDate}"></td>
+                    <td th:text="${item.deptNo}"></td>
+                    <td th:text="${item.fromDate}"></td>
+                    <td th:text="${item.toDate}"></td>
+                    <td colspan="text-center">
+                        <div class="d-flex gap-2 justify-content-center">
+
+                            <!-- editar -->
+                            <a th:href="@{/employee/editar/{empNo}(empNo=${item.empNo})}">
+                                Editar
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>  <!-- 𝕗𝕚𝕟 𝕕𝕖𝕝 𝕕𝕚𝕧 -->
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+</html>

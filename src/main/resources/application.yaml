@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: api-empleados
+  datasource:
+    url: jdbc:mysql://localhost:3306/employees?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: 12345
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  thymeleaf:
+    check-template-location: false
+
+server:
+  port: 8070
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+    root: INFO
