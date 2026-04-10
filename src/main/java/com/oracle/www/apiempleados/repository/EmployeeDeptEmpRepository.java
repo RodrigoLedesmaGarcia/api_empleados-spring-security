@@ -22,20 +22,19 @@ public interface EmployeeDeptEmpRepository extends JpaRepository<Employee, Integ
                        e.last_name    as lastName,
                        e.gender       as gender,
                        e.hire_date    as  hireDate,
-                       de.emp_no      as empNo,
                        de.dept_no     as deptNo,
                        de.from_date   as fromDate,
-                       de.to_date     as fromDate
+                       de.to_date     as toDate
                    from employees e left join dept_emp de on e.emp_no = de.emp_no
                 WHERE (:empNo     IS NULL OR e.emp_no = :empNo)
                 AND (:birthDate   IS NULL OR e.birth_date = :birthDate)
-                AND (:first_name  IS NULL OR e.first_name LIKE CONCAT('%', :firstName, '%'))
+                AND (:firstName  IS NULL OR e.first_name LIKE CONCAT('%', :firstName, '%'))
                 AND (:lastName    IS NULL OR e.last_name LIKE CONCAT('%', :lastName, '%'))
                 AND (:gender      IS NULL OR UPPER(TRIM(e.gender)) = UPPER(TRIM(:gender)))
-                AND (:hireDate    IS NULL OR e.hire_date = : hireDate)
+                AND (:hireDate    IS NULL OR e.hire_date = :hireDate)
                 AND (:deptNo      IS NULL OR de.dept_no = :deptNo)
-                AND (:formDate    IS NULL OR de.form_date  >= :fromDate)
-                AND (:toDate      IS NULL OR de.to_date <= : toDate)
+                AND (:fromDate    IS NULL OR de.from_date  >= :fromDate)
+                AND (:toDate      IS NULL OR de.to_date <= :toDate)
                 """,
 
         countQuery = """
@@ -44,10 +43,10 @@ public interface EmployeeDeptEmpRepository extends JpaRepository<Employee, Integ
                      LEFT JOIN dept_emp de ON e.emp_no = de.emp_no
                      WHERE (:empNo     IS NULL OR e.emp_no = :empNo)
                      AND (:birthDate   IS NULL OR e.birth_date = :birthDate)
-                     AND (:first_name  IS NULL OR e.first_name LIKE CONCAT('%', :firstName, '%'))
+                     AND (:firstName  IS NULL OR e.first_name LIKE CONCAT('%', :firstName, '%'))
                      AND (:lastName    IS NULL OR e.last_name LIKE CONCAT('%', :lastName, '%'))
                      AND (:gender      IS NULL OR UPPER(TRIM(e.gender)) = UPPER(TRIM(:gender)))
-                     AND (:hireDate    IS NULL OR e.hire_date = : hireDate)
+                     AND (:hireDate    IS NULL OR e.hire_date = :hireDate)
                      """,
 
         nativeQuery = true

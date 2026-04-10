@@ -1,4 +1,5 @@
-package com.oracle.www.apiempleados.security.repository;
+/*
+package com.oracle.www.apiempleados.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,3 +13,6 @@ public class CrytoSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+
+
+ */

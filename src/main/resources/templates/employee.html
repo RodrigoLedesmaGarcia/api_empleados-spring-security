@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Editar, Eliminar Empleado</title>
+    <title>Empleados</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </head>
@@ -10,10 +10,14 @@
 <!-- navbar -->
 <nav class="navbar navbar-expand-lg bg-secondary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img th:src="@{/images/icono.ico}" alt="Logo" width="40" height="40">
-        </a>
-        <h4 class="text-center"> Sistema de consulta de empleados</h4>
+        <div class="d-flex align-items-center gap-3">
+            <img th:src="@{/images/icono.ico}" width="40" height="40">
+            <h5 class="mb-0">Sistema de consulta de empleados</h5>
+        </div>
+
+        <div class="ms-auto text-white">
+            <span th:text="${username}"></span>
+        </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -45,7 +49,7 @@
 
     <!-- genero -->
     <div class="col-12 col-md-3">
-        <label class="form-control" >Género</label>
+        <label class="form-label" >Género</label>
         <select name="gender" class="form-select">
             <option value=""  th:selected="${gender == null || gender == ''}" >Todos</option>
             <option value="M" th:selected="${gender == 'M'}">Masculino</option>
@@ -55,13 +59,13 @@
 
     <!-- departamento -->
     <div class="col-12 col-md-3">
-        <label class="form-control">Departamento</label>
+        <label class="form-label">Departamento</label>
         <input type="text" th:value="${deptNo}" name="deptNo" class="form-control">
     </div>
 
     <!-- fecha de contratacion -->
     <div class="col-12 col-md-3">
-        <label class="form-control">Contratacion (fecha)</label>
+        <label class="form-label">Contratacion (fecha)</label>
         <input type="date" th:value="${hireDate}" name="hireDate" class="form-control">
     </div>
 
@@ -111,7 +115,7 @@
         <div class="text-muted small">
             Total <span th:text="${results.totalElements}" ></span>
             Pagina <span th:text="${results.number + 1}" ></span>
-            de <span th:text="${results.totalElements}"></span>
+            de <span th:text="${results.totalPages}"></span>
         </div>
 
         <div class="d-flex gap-2">
@@ -148,49 +152,54 @@
                 <button class="btn btn-outline-primary btn-sm" type="submit" th:disabled="${results.last}" >Siguiente</button>
             </form>
         </div>
-
-
-        <!-- tablas -->
-        <table class="table table-sm table-stripped align-middle">
-            <thead>
-                <tr>
-                    <th>N° Empleado</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Género</th>
-                    <th>Nacimiento</th>
-                    <th>Contratacion</th>
-                    <th>Departamento</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item : ${results.content}">
-                    <td th:text="${item.empNo}"></td>
-                    <td th:text="${item.firstName}"></td>
-                    <td th:text="${item.lastName}"></td>
-                    <td th:text="${item.gender}"></td>
-                    <td th:text="${item.birthDate}"></td>
-                    <td th:text="${item.hireDate}"></td>
-                    <td th:text="${item.deptNo}"></td>
-                    <td th:text="${item.fromDate}"></td>
-                    <td th:text="${item.toDate}"></td>
-                    <td colspan="text-center">
-                        <div class="d-flex gap-2 justify-content-center">
-
-                            <!-- editar -->
-                            <a th:href="@{/employee/editar/{empNo}(empNo=${item.empNo})}">
-                                Editar
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
     </div>
+    <!-- tablas -->
+    <table class="table table-sm table-striped align-middle">
+        <thead>
+        <tr>
+            <th>N° Empleado</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Género</th>
+            <th>Nacimiento</th>
+            <th>Contratacion</th>
+            <th>Departamento</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${results.content}">
+            <td th:text="${item.empNo}"></td>
+            <td th:text="${item.firstName}"></td>
+            <td th:text="${item.lastName}"></td>
+            <td th:text="${item.gender}"></td>
+            <td th:text="${item.birthDate}"></td>
+            <td th:text="${item.hireDate}"></td>
+            <td th:text="${item.deptNo}"></td>
+            <td th:text="${item.fromDate}"></td>
+            <td th:text="${item.toDate}"></td>
+            <td class="text-center">
+                <div class="d-flex justify-content-center gap-2">
+                    <a th:href="@{/employee/editar/{empNo}(empNo=${item.empNo})}" class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <form th:action="@{/employee/eliminar/{empNo}(empNo=${item.empNo})}"
+                              method="post"
+                              class="m-0"
+                              onsubmit="return confirm('¿Seguro que quiere eliminar este empleado?')">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+    </table>
 </div>  <!-- 𝕗𝕚𝕟 𝕕𝕖𝕝 𝕕𝕚𝕧 -->
 
 </body>

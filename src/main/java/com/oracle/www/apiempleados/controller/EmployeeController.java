@@ -9,6 +9,8 @@ import com.oracle.www.apiempleados.utils.EmployeeProjection;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,8 +43,9 @@ public class EmployeeController {
 
 
     // --- 𝕚𝕟𝕚𝕔𝕚𝕠 ---
-    @GetMapping({"/inicio", "/home"})
-    public String view(){
+    @GetMapping("/inicio")
+    public String view(Authentication auth, Model model) {
+        model.addAttribute("username", auth.getName());
         return "employee";
     }
 
@@ -155,7 +158,7 @@ public class EmployeeController {
     public String editarEmpleado(@Valid @ModelAttribute("employee") EmployeeCreateAndUpdateRequest request, BindingResult result){
 
         if(result.hasErrors()){
-            return "form-edit";
+            return "form-editar";
         }
 
         service.editarEmpleado(request);
@@ -165,6 +168,7 @@ public class EmployeeController {
 
 
     // --- 𝔼𝕝𝕚𝕞𝕚𝕟𝕒𝕣 𝕖𝕞𝕡𝕝𝕖𝕒𝕕𝕠 ---
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/eliminar/{empNo}")
     private String eliminarEmpleado(@PathVariable Integer empNo){
         service.eliminarEmpleado(empNo);

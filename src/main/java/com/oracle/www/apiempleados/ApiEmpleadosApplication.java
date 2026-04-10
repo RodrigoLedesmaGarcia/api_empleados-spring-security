@@ -10,7 +10,7 @@ public class ApiEmpleadosApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiEmpleadosApplication.class, args);
         // contraseña segura
-        System.out.println(new BCryptPasswordEncoder().encode("Rodrigo123"));
+        System.out.println(new BCryptPasswordEncoder().encode("12345"));
     }
 
 }

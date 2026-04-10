@@ -16,6 +16,8 @@ public interface EmployeeProjection {
 
     public abstract LocalDate getHireDate();
 
+    LocalDate getToDate();
+
     public abstract String getDeptNo();
 
     public abstract LocalDate getFromDate();
