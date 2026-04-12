@@ -132,18 +132,24 @@ public class EmployeeController {
     @GetMapping("/editar/{empNo}")
     public String EditarFormulario(@PathVariable Integer empNo, Model model){
 
-        Employee employee = service.findById(empNo).orElseThrow( () -> new RuntimeException("Empleado con en N° de empleado: "+empNo+" no encontrado"));
+        Employee employee = service.findById(empNo)
+                .orElseThrow(() -> new RuntimeException(
+                        "Empleado con N° de empleado: " + empNo + " no encontrado"));
+
+        System.out.println("GET editar");
+        System.out.println("employee.hireDate = " + employee.getHireDate());
 
         EmployeeCreateAndUpdateRequest request = new EmployeeCreateAndUpdateRequest();
         request.setEmpNo(employee.getEmpNo());
         request.setBirthDate(employee.getBirthDate());
         request.setFirstName(employee.getFirstName());
-        request.setLastName(request.getLastName());
-        request.setGender(request.getGender());
-        request.setHireDate(request.getHireDate());
+        request.setLastName(employee.getLastName());
+        request.setGender(employee.getGender());
+        request.setHireDate(employee.getHireDate());
 
-        if(employee.getDepartaments() != null && !employee.getDepartaments().isEmpty()){
+        System.out.println("request.hireDate = " + request.getHireDate());
 
+        if (employee.getDepartaments() != null && !employee.getDepartaments().isEmpty()) {
             DeptEmp deptEmp = employee.getDepartaments().get(0);
             request.setDeptNo(deptEmp.getId().getDeptNo());
             request.setFromDate(deptEmp.getFromDate());
@@ -154,17 +160,32 @@ public class EmployeeController {
         return "form-editar";
     }
 
-    @PostMapping("/editar")
-    public String editarEmpleado(@Valid @ModelAttribute("employee") EmployeeCreateAndUpdateRequest request, BindingResult result){
 
-        if(result.hasErrors()){
+    @PostMapping("/editar")
+    public String editarEmpleado(
+            @Valid @ModelAttribute("employee") EmployeeCreateAndUpdateRequest request,
+            BindingResult result) {
+
+        System.out.println("Entró al POST editar");
+        System.out.println("empNo: " + request.getEmpNo());
+        System.out.println("firstName: " + request.getFirstName());
+        System.out.println("lastName: " + request.getLastName());
+        System.out.println("gender: " + request.getGender());
+        System.out.println("hireDate: " + request.getHireDate());
+        System.out.println("birthDate: " + request.getBirthDate());
+        System.out.println("deptNo: " + request.getDeptNo());
+        System.out.println("fromDate: " + request.getFromDate());
+        System.out.println("toDate: " + request.getToDate());
+        System.out.println("Errores: " + result.hasErrors());
+
+        if (result.hasErrors()) {
+            result.getAllErrors().forEach(error -> System.out.println(error.toString()));
             return "form-editar";
         }
 
         service.editarEmpleado(request);
         return "redirect:/employee/inicio?editado=true";
     }
-
 
 
     // --- 𝔼𝕝𝕚𝕞𝕚𝕟𝕒𝕣 𝕖𝕞𝕡𝕝𝕖𝕒𝕕𝕠 ---

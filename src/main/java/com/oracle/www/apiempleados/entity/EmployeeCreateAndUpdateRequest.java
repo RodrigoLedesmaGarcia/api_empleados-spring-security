@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public class EmployeeCreateAndUpdateRequest {
 
     @Column(name = "emp_no", nullable = false)
+    @NotNull(message = "el número de empleado es obligatorio")
     private Integer empNo;
 
     @Column(name = "birth_date", nullable = false)
@@ -17,7 +18,7 @@ public class EmployeeCreateAndUpdateRequest {
     @NotNull(message = "el campo de fecha de nacimiento no puede estar vacio")
     private LocalDate birthDate;
 
-    @Column(name = "firts_name", nullable = false)
+    @Column(name = "first_name", nullable = false)
     @NotBlank(message = "el campo de nombre(s) no puede estar vacio")
     private String firstName;
 
@@ -45,7 +46,7 @@ public class EmployeeCreateAndUpdateRequest {
     private LocalDate fromDate;
 
 
-    @Column(name = "to_date", nullable = false)
+    @Column(name = "to_date")
     @DateTimeFormat( iso = DateTimeFormat.ISO.DATE)
     private LocalDate toDate;
 
