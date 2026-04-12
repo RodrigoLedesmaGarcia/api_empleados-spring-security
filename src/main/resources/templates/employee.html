@@ -222,8 +222,39 @@
         </tbody>
     </table>
 </div>  <!-- 𝕗𝕚𝕟 𝕕𝕖𝕝 𝕕𝕚𝕧 -->
-
+<!-- sin conexion -->
+<div class="modal fade" id="sinInternetModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Sin conexión</h5>
+            </div>
+            <div class="modal-body">
+                Parece que no tienes conexión a internet.
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+<script>
+    const modalInternet = new bootstrap.Modal(document.getElementById('sinInternetModal'));
+
+    function verificarConexion() {
+        if (!navigator.onLine) {
+            modalInternet.show();
+        }
+    }
+
+    window.addEventListener('offline', () => {
+        modalInternet.show();
+    });
+
+    window.addEventListener('online', () => {
+        modalInternet.hide();
+    });
+
+    verificarConexion();
+</script>
 <script th:src="@{/logo.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
