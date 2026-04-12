@@ -8,16 +8,40 @@
 </head>
 <body>
 <!-- navbar -->
-<nav class="navbar navbar-expand-lg bg-secondary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img th:src="@{/images/icono.ico}" alt="Logo" width="40" height="40">
+
+        <!-- Logo + título -->
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+            <img th:src="@{/images/icono.ico}" width="40" height="40" class="rounded">
+            <span class="fw-semibold">Sistema de empleados</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+        <!-- Botón responsive -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <!-- Contenido derecho -->
         <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="ms-auto d-flex align-items-center gap-3">
+
+                <!-- Usuario -->
+                <span class="text-light small">
+                    👤 <span th:text="${username}"></span>
+                </span>
+
+                <!-- Logout -->
+                <form th:action="@{/logout}" method="post" class="m-0">
+                    <button type="submit" class="btn btn-outline-light btn-sm">
+                        Cerrar sesión
+                    </button>
+                </form>
+
+            </div>
         </div>
+
     </div>
 </nav>
 
@@ -92,8 +116,41 @@
      </div>
  </div>
 </div>
-
+<!-- sin conexion -->
+<div class="modal fade" id="sinInternetModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Sin conexión</h5>
+            </div>
+            <div class="modal-body">
+                Parece que no tienes conexión a internet.
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+<!-- sin conexion -->
+<script>
+    const modalInternet = new bootstrap.Modal(document.getElementById('sinInternetModal'));
+
+    function verificarConexion() {
+        if (!navigator.onLine) {
+            modalInternet.show();
+        }
+    }
+
+    window.addEventListener('offline', () => {
+        modalInternet.show();
+    });
+
+    window.addEventListener('online', () => {
+        modalInternet.hide();
+    });
+
+    verificarConexion();
+</script>
+<script th:src="@{/logo.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
 </html>

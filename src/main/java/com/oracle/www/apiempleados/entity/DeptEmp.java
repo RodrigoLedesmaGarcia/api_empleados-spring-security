@@ -1,9 +1,6 @@
 package com.oracle.www.apiempleados.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -13,6 +10,11 @@ public class DeptEmp {
 
     @EmbeddedId
     private DeptEmpId id;
+
+    @ManyToOne
+    @MapsId("empNo")
+    @JoinColumn(name = "emp_no")
+    private Employee employee;
 
     @Column(name = "from_date", nullable = false)
     private LocalDate fromDate;
