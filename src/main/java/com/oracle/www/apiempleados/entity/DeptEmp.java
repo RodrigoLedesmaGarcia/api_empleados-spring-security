@@ -38,12 +38,12 @@ public class DeptEmp {
         this.id = id;
     }
 
-    public LocalDate getFromDate() {
-        return fromDate;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setFromDate(LocalDate fromDate) {
-        this.fromDate = fromDate;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public LocalDate getToDate() {
@@ -53,4 +53,13 @@ public class DeptEmp {
     public void setToDate(LocalDate toDate) {
         this.toDate = toDate;
     }
+
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
 }
+

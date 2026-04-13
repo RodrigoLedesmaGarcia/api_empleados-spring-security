@@ -66,7 +66,7 @@
                     <!-- apellido -->
                     <div class="mb-3">
                         <label class="from-label" >Apellido</label>
-                        <input type="text" class="form-label" th:field="*{lastName}" required minlength="2" maxlength="100">
+                        <input type="text" class="form-control" th:field="*{lastName}" required minlength="2" maxlength="100">
                         <div class="invalid-feedback">Ingrese un apellido valido</div>
                         <div class="text-danger small" th:errors="*{lastName}" ></div>
                     </div>
@@ -91,12 +91,13 @@
                     <!-- genero -->
                     <div class="mb-3">
                         <label class="form-label">Género</label>
-                        <select class="form-select" th:value="*{gender}" required>
-                            <option value="" >--seleccione--</option>
+                        <select class="form-select" th:field="*{gender}" required>
+                            <option value="">--seleccione--</option>
                             <option value="M">Masculino</option>
                             <option value="F">Femenino</option>
                         </select>
-                        <div class="invalid-feedback" >seleccione un genero</div>
+                        <div class="invalid-feedback">seleccione un genero</div>
+                        <div class="text-danger small" th:errors="*{gender}"></div>
                     </div>
 
                     <!-- departamento -->
@@ -121,7 +122,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label" >Desde</label>
-                            <input type="date" class="from-control" th:field="*{fromDate}">
+                            <input type="date" class="form-control" th:field="*{fromDate}">
                             <div class="invalid-feedback" >ingrese una fecha</div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -215,7 +216,7 @@
             const  modal = new bootstrap.Modal(modalEl);
             modal.show();
 
-            modalEl.addEventListener('hidden.bs.model', () => {
+            modalEl.addEventListener('hidden.bs.modal', () => {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }, {once: true});
         }

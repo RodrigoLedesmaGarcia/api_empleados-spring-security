@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -64,6 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public void crearEmpleado(EmployeeCreateAndUpdateRequest request) {
 
         int nextEmpNo = repository.maxEmpNo() + 1;
@@ -82,10 +84,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         DeptEmp deptEmp = new DeptEmp();
         deptEmp.setId(new DeptEmpId(nextEmpNo, request.getDeptNo()));
+        deptEmp.setEmployee(employee);
         deptEmp.setFromDate(request.getFromDate());
         deptEmp.setToDate(toDate);
 
         employee.getDepartaments().add(deptEmp);
+
         repository.save(employee);
     }
 

@@ -10,7 +10,6 @@ import java.time.LocalDate;
 public class EmployeeCreateAndUpdateRequest {
 
     @Column(name = "emp_no", nullable = false)
-    @NotNull(message = "el número de empleado es obligatorio")
     private Integer empNo;
 
     @Column(name = "birth_date", nullable = false)

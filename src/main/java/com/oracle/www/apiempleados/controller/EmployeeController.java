@@ -108,19 +108,20 @@ public class EmployeeController {
         return "new-employee";
     }
 
+
     @PostMapping("/nuevo")
-    public String crearEmpleado(@Valid @ModelAttribute("employee") EmployeeCreateAndUpdateRequest request, BindingResult result){
+    public String crearEmpleado(
+            @Valid @ModelAttribute("employee") EmployeeCreateAndUpdateRequest request,
+            BindingResult result) {
 
+        System.out.println("Entró al POST");
+        System.out.println("Gender: " + request.getGender());
 
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
+            System.out.println("Hay errores");
+            result.getAllErrors().forEach(e -> System.out.println(e.toString()));
             return "new-employee";
         }
-
-        /*
-        if (request.getToDate() == null) {
-            request.setToDate(LocalDate.of(9999, 1, 1));
-        }
-         */
 
         service.crearEmpleado(request);
         return "redirect:/employee/nuevo?ok";
