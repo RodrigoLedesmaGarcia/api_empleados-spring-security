@@ -44,4 +44,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/rodrigoledesmagarcia/crud-empleados:v1
+          tags: ghcr.io/rodrigoledesmagarcia/crud-empleados:v2.0.0
