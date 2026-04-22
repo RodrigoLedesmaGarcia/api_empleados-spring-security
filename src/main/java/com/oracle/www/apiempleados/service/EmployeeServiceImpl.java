@@ -96,37 +96,51 @@ public class EmployeeServiceImpl implements EmployeeService {
     /*
     Editar empleado ya existente
      */
+
     @Override
+    @Transactional
     public void editarEmpleado(EmployeeCreateAndUpdateRequest request) {
 
-        if (request.getDeptNo() == null){
-            throw new RuntimeException("El N° es de menester para poder editarlo");
+        if (request == null) {
+            throw new RuntimeException("La solicitud no puede ser nula");
+        }
+
+        if (request.getEmpNo() == null) {
+            throw new RuntimeException("El empNo es obligatorio para editar el empleado");
+        }
+
+        if (request.getDeptNo() == null || request.getDeptNo().isBlank()) {
+            throw new RuntimeException("El deptNo es obligatorio para editar el empleado");
         }
 
         Employee employee = repository.findById(request.getEmpNo())
-                .orElseThrow( () -> new RuntimeException("Empleado no encontrado: " + request.getEmpNo()));
+                .orElseThrow(() -> new RuntimeException("Empleado no encontrado: " + request.getEmpNo()));
 
         employee.setBirthDate(request.getBirthDate());
-        employee.setFirstName(request.getFirstName());
-        employee.setLastName(request.getLastName());
-        employee.setGender(request.getGender());
+        employee.setFirstName(quitarEscacios(request.getFirstName()));
+        employee.setLastName(quitarEscacios(request.getLastName()));
+        employee.setGender(quitarEscacios(request.getGender()));
         employee.setHireDate(request.getHireDate());
 
-        if(employee.getDepartaments() != null){
+        LocalDate toDate = request.getToDate() != null
+                ? request.getToDate()
+                : LocalDate.of(9999, 1, 1);
+
+        if (employee.getDepartaments() != null) {
             employee.getDepartaments().clear();
         }
 
         DeptEmp deptEmp = new DeptEmp();
-        deptEmp.setId(new DeptEmpId(employee.getEmpNo(), request.getDeptNo()));
+        deptEmp.setId(new DeptEmpId(employee.getEmpNo(), quitarEscacios(request.getDeptNo())));
+        deptEmp.setEmployee(employee);
         deptEmp.setFromDate(request.getFromDate());
-        deptEmp.setToDate(request.getToDate());
+        deptEmp.setToDate(toDate);
 
         employee.getDepartaments().add(deptEmp);
 
         repository.save(employee);
-
-
     }
+
 
     /*
     Eliminar empleado
