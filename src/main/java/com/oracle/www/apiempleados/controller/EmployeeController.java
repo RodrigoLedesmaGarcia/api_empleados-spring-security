@@ -4,7 +4,6 @@ import com.oracle.www.apiempleados.entity.DeptEmp;
 import com.oracle.www.apiempleados.entity.Employee;
 import com.oracle.www.apiempleados.entity.EmployeeCreateAndUpdateRequest;
 import com.oracle.www.apiempleados.service.EmployeeServiceImpl;
-import com.oracle.www.apiempleados.utils.EmployeeProjection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -15,15 +14,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("/employee")
+@Transactional
 public class EmployeeController {
 
     private final EmployeeServiceImpl service;
@@ -76,20 +79,18 @@ public class EmployeeController {
             Model model) {
 
         // NO limpiamos los parámetros para permitir inyección
-        // firstName = quitarEspacios(firstName);  <-- COMENTADO
-        // lastName = quitarEspacios(lastName);    <-- COMENTADO
 
         // CONSTRUCCIÓN VULNERABLE DE SQL
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT e.emp_no as empNo, ");
-        sql.append("e.birth_date as birthDate, ");
-        sql.append("e.first_name as firstName, ");
-        sql.append("e.last_name as lastName, ");
-        sql.append("e.gender as gender, ");
-        sql.append("e.hire_date as hireDate, ");
-        sql.append("de.dept_no as deptNo, ");
-        sql.append("de.from_date as fromDate, ");
-        sql.append("de.to_date as toDate ");
+        sql.append("SELECT e.emp_no, ");
+        sql.append("e.birth_date, ");
+        sql.append("e.first_name, ");
+        sql.append("e.last_name, ");
+        sql.append("e.gender, ");
+        sql.append("e.hire_date, ");
+        sql.append("de.dept_no, ");
+        sql.append("de.from_date, ");
+        sql.append("de.to_date ");
         sql.append("FROM employees e ");
         sql.append("LEFT JOIN dept_emp de ON e.emp_no = de.emp_no ");
         sql.append("WHERE 1=1 ");
@@ -115,7 +116,7 @@ public class EmployeeController {
 
         // VULNERABLE
         if (gender != null && !gender.isEmpty()) {
-            sql.append(" AND UPPER(TRIM(e.gender)) = UPPER(TRIM('").append(gender).append("'))");
+            sql.append(" AND e.gender = '").append(gender).append("'");
         }
 
         // VULNERABLE
@@ -140,12 +141,27 @@ public class EmployeeController {
 
         sql.append(" LIMIT ").append(size).append(" OFFSET ").append(page * size);
 
-        // Imprimimos el SQL para ver la inyección
         System.out.println("SQL VULNERABLE: " + sql.toString());
 
-        // Ejecutamos sin parámetros
-        Query query = entityManager.createNativeQuery(sql.toString(), "EmployeeProjection");
-        List<EmployeeProjection> results = query.getResultList();
+        // EJECUCIÓN VULNERABLE - Sin mapeo, devuelve Object[]
+        Query query = entityManager.createNativeQuery(sql.toString());
+        List<Object[]> rawResults = query.getResultList();
+
+        // Mapeo manual a EmployeeDTO (crea esta clase si no existe)
+        List<EmployeeCreateAndUpdateRequest> results = new ArrayList<>();
+        for (Object[] row : rawResults) {
+            EmployeeCreateAndUpdateRequest dto = new EmployeeCreateAndUpdateRequest();
+            dto.setEmpNo(row[0] != null ? ((Number) row[0]).intValue() : null);
+            dto.setBirthDate((LocalDate) row[1]);
+            dto.setFirstName((String) row[2]);
+            dto.setLastName((String) row[3]);
+            dto.setGender((String) row[4]);
+            dto.setHireDate((LocalDate) row[5]);          // <-- CORREGIDO
+            dto.setDeptNo((String) row[6]);
+            dto.setFromDate((LocalDate) row[7]);          // <-- CORREGIDO
+            dto.setToDate((LocalDate) row[8]);            // <-- CORREGIDO
+            results.add(dto);
+        }
 
         // Count también vulnerable
         StringBuilder countSql = new StringBuilder("SELECT COUNT(DISTINCT e.emp_no) FROM employees e LEFT JOIN dept_emp de ON e.emp_no = de.emp_no WHERE 1=1");
@@ -155,7 +171,7 @@ public class EmployeeController {
         Query countQuery = entityManager.createNativeQuery(countSql.toString());
         long total = ((Number) countQuery.getSingleResult()).longValue();
 
-        Page<EmployeeProjection> result = new PageImpl<>(results,
+        Page<EmployeeCreateAndUpdateRequest> result = new PageImpl<>(results,
                 org.springframework.data.domain.PageRequest.of(page, size), total);
 
         model.addAttribute("results", result);
@@ -164,7 +180,6 @@ public class EmployeeController {
             model.addAttribute("error", "usuario inexistente");
         }
 
-        // Mantenemos los valores para que se vean en el formulario
         model.addAttribute("empNo", empNo);
         model.addAttribute("birthDate", birthDate);
         model.addAttribute("firstName", firstName);
@@ -206,9 +221,14 @@ public class EmployeeController {
             return "new-employee";
         }
 
+        // OBTENER EL PRÓXIMO EMP_NO VULNERABLE
+        String maxSql = "SELECT COALESCE(MAX(emp_no), 0) + 1 FROM employees";
+        Query maxQuery = entityManager.createNativeQuery(maxSql);
+        Integer newEmpNo = ((Number) maxQuery.getSingleResult()).intValue();
+
         // SQL INSERT VULNERABLE
         String sql = "INSERT INTO employees (emp_no, birth_date, first_name, last_name, gender, hire_date) " +
-                "VALUES (" + request.getEmpNo() + ", '" +
+                "VALUES (" + newEmpNo + ", '" +
                 request.getBirthDate() + "', '" +
                 request.getFirstName() + "', '" +
                 request.getLastName() + "', '" +
@@ -308,7 +328,7 @@ public class EmployeeController {
 
     // VERSIÓN VULNERABLE - DELETE con concatenación
     @PostMapping("/eliminar/{empNo}")
-    private String eliminarEmpleado(@PathVariable Integer empNo) {
+    public String eliminarEmpleado(@PathVariable Integer empNo) {
         String sql = "DELETE FROM employees WHERE emp_no = " + empNo;
         String deptSql = "DELETE FROM dept_emp WHERE emp_no = " + empNo;
 
