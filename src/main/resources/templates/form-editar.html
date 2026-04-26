@@ -1,185 +1,185 @@
-<!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar, Eliminar Empleado</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-</head>
-<body>
-<!-- navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container-fluid">
+<!--<!DOCTYPE html>-->
+<!--<html lang="es" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Editar, Eliminar Empleado</title>-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; navbar &ndash;&gt;-->
+<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">-->
+<!--    <div class="container-fluid">-->
 
-        <!-- Logo + título -->
-        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-            <img th:src="@{/images/icono.ico}" width="40" height="40" class="rounded">
-            <span class="fw-semibold">Sistema de empleados</span>
-        </a>
+<!--        &lt;!&ndash; Logo + título &ndash;&gt;-->
+<!--        <a class="navbar-brand d-flex align-items-center gap-2" href="#">-->
+<!--            <img th:src="@{/images/icono.ico}" width="40" height="40" class="rounded">-->
+<!--            <span class="fw-semibold">Sistema de empleados</span>-->
+<!--        </a>-->
 
-        <!-- Botón responsive -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<!--        &lt;!&ndash; Botón responsive &ndash;&gt;-->
+<!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"-->
+<!--                data-bs-target="#navbarNav">-->
+<!--            <span class="navbar-toggler-icon"></span>-->
+<!--        </button>-->
 
-        <!-- Contenido derecho -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="ms-auto d-flex align-items-center gap-3">
+<!--        &lt;!&ndash; Contenido derecho &ndash;&gt;-->
+<!--        <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--            <div class="ms-auto d-flex align-items-center gap-3">-->
 
-                <!-- Usuario -->
-                <span class="text-light small">
-                    👤 <span th:text="${username}"></span>
-                </span>
+<!--                &lt;!&ndash; Usuario &ndash;&gt;-->
+<!--                <span class="text-light small">-->
+<!--                    👤 <span th:text="${username}"></span>-->
+<!--                </span>-->
 
-                <!-- Logout -->
-                <form th:action="@{/logout}" method="post" class="m-0">
-                    <button type="submit" class="btn btn-outline-light btn-sm">
-                        Cerrar sesión
-                    </button>
-                </form>
+<!--                &lt;!&ndash; Logout &ndash;&gt;-->
+<!--                <form th:action="@{/logout}" method="post" class="m-0">-->
+<!--                    <button type="submit" class="btn btn-outline-light btn-sm">-->
+<!--                        Cerrar sesión-->
+<!--                    </button>-->
+<!--                </form>-->
 
-            </div>
-        </div>
+<!--            </div>-->
+<!--        </div>-->
 
-    </div>
-</nav>
-<!-- cuerpo -->
-<div class="container">
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
-            <br>
-            <a th:href="@{/employee/inicio}" class="btn btn-secondary">Regresar al inicio</a>
-            <hr>
-            <br>
-            <h2 class=" text-center mb-4" >Editar empleado</h2>
+<!--    </div>-->
+<!--</nav>-->
+<!--&lt;!&ndash; cuerpo &ndash;&gt;-->
+<!--<div class="container">-->
+<!--    <div class="card shadow-sm border-0">-->
+<!--        <div class="card-body">-->
+<!--            <br>-->
+<!--            <a th:href="@{/employee/inicio}" class="btn btn-secondary">Regresar al inicio</a>-->
+<!--            <hr>-->
+<!--            <br>-->
+<!--            <h2 class=" text-center mb-4" >Editar empleado</h2>-->
 
-            <form th:action="@{/employee/editar}" th:object="${employee}" method="post">
+<!--            <form th:action="@{/employee/editar}" th:object="${employee}" method="post">-->
 
-                <input type="hidden" th:field="*{empNo}">
+<!--                <input type="hidden" th:field="*{empNo}">-->
 
-                <!-- fila de numero de empleado, nombre y apellido -->
-                <div class="row mb-3">
-                    <!-- numero de empleado -->
-                    <div class="col-12 col-md-3">
-                        <label class="form-label">Número de empleado</label>
-                        <input type="text" th:field="*{empNo}" class="form-control" readonly>
-                        <div class="text-danger small" th:if="${#fields.hasErrors('empNo')}" th:errors="*{empNo}" ></div>
-                    </div>
+<!--                &lt;!&ndash; fila de numero de empleado, nombre y apellido &ndash;&gt;-->
+<!--                <div class="row mb-3">-->
+<!--                    &lt;!&ndash; numero de empleado &ndash;&gt;-->
+<!--                    <div class="col-12 col-md-3">-->
+<!--                        <label class="form-label">Número de empleado</label>-->
+<!--                        <input type="text" th:field="*{empNo}" class="form-control" readonly>-->
+<!--                        <div class="text-danger small" th:if="${#fields.hasErrors('empNo')}" th:errors="*{empNo}" ></div>-->
+<!--                    </div>-->
 
-                    <!-- nombre -->
-                    <div class="col-12 col-md-3">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" th:field="*{firstName}" class="form-control">
-                        <div class="text-danger small" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" ></div>
-                    </div>
+<!--                    &lt;!&ndash; nombre &ndash;&gt;-->
+<!--                    <div class="col-12 col-md-3">-->
+<!--                        <label class="form-label">Nombre</label>-->
+<!--                        <input type="text" th:field="*{firstName}" class="form-control">-->
+<!--                        <div class="text-danger small" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" ></div>-->
+<!--                    </div>-->
 
-                    <!-- apellido -->
-                    <div class="col-12 col-md-3">
-                        <label class="form-label">Apellido</label>
-                        <input type="text" th:field="*{lastName}" class="form-control">
-                        <div class="text-danger small" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" ></div>
-                    </div>
-                </div>
-                <br>
+<!--                    &lt;!&ndash; apellido &ndash;&gt;-->
+<!--                    <div class="col-12 col-md-3">-->
+<!--                        <label class="form-label">Apellido</label>-->
+<!--                        <input type="text" th:field="*{lastName}" class="form-control">-->
+<!--                        <div class="text-danger small" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" ></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <br>-->
 
-                <!-- fila de genero, fecha de nacimiento y fecha de contratacion -->
-                <div class="row mb-3">
-                    <!-- genero -->
-                    <div class="col-12 col-md-3">
-                        <label class="form-label">Género</label>
-                        <select th:field="*{gender}" class="form-select">
-                            <option value="M">Masculino</option>
-                            <option value="F">Femenino</option>
-                        </select>
-                        <div class="text-danger small" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" ></div>
-                    </div>
+<!--                &lt;!&ndash; fila de genero, fecha de nacimiento y fecha de contratacion &ndash;&gt;-->
+<!--                <div class="row mb-3">-->
+<!--                    &lt;!&ndash; genero &ndash;&gt;-->
+<!--                    <div class="col-12 col-md-3">-->
+<!--                        <label class="form-label">Género</label>-->
+<!--                        <select th:field="*{gender}" class="form-select">-->
+<!--                            <option value="M">Masculino</option>-->
+<!--                            <option value="F">Femenino</option>-->
+<!--                        </select>-->
+<!--                        <div class="text-danger small" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" ></div>-->
+<!--                    </div>-->
 
-                    <!-- Nacimineto -->
-                    <div class="col-12 col-md-3">
-                        <label class="form-label">Nacimineto</label>
-                        <input type="date" th:field="*{birthDate}" class="form-control">
-                        <div class="text-danger small" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" ></div>
-                    </div>
+<!--                    &lt;!&ndash; Nacimineto &ndash;&gt;-->
+<!--                    <div class="col-12 col-md-3">-->
+<!--                        <label class="form-label">Nacimineto</label>-->
+<!--                        <input type="date" th:field="*{birthDate}" class="form-control">-->
+<!--                        <div class="text-danger small" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" ></div>-->
+<!--                    </div>-->
 
-                    <!-- contratacion -->
-                    <div class="col-12 col-md-3">
-                        <label class="form-label">Contratacion</label>
-                        <input type="date" th:field="*{hireDate}" class="form-control">
-                        <div class="text-danger small" th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}" ></div>
-                    </div>
-                </div>
-                <br>
+<!--                    &lt;!&ndash; contratacion &ndash;&gt;-->
+<!--                    <div class="col-12 col-md-3">-->
+<!--                        <label class="form-label">Contratacion</label>-->
+<!--                        <input type="date" th:field="*{hireDate}" class="form-control">-->
+<!--                        <div class="text-danger small" th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}" ></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <br>-->
 
-                <!-- fila de departamento, fecha "desde" la contraracion y la fecha de "hasta" que significa que aun sigue laborando -->
-                <div class="row mb-3">
-                    <!-- departamento -->
-                   <div class="col-12 col-md-3">
-                       <label class="form-label">Departamento</label>
-                       <input type="text" th:field="*{deptNo}" class="form-control">
-                       <div class="text-danger small" th:if="${#fields.hasErrors('deptNo')}" th:errors="*{deptNo}" ></div>
-                   </div>
+<!--                &lt;!&ndash; fila de departamento, fecha "desde" la contraracion y la fecha de "hasta" que significa que aun sigue laborando &ndash;&gt;-->
+<!--                <div class="row mb-3">-->
+<!--                    &lt;!&ndash; departamento &ndash;&gt;-->
+<!--                   <div class="col-12 col-md-3">-->
+<!--                       <label class="form-label">Departamento</label>-->
+<!--                       <input type="text" th:field="*{deptNo}" class="form-control">-->
+<!--                       <div class="text-danger small" th:if="${#fields.hasErrors('deptNo')}" th:errors="*{deptNo}" ></div>-->
+<!--                   </div>-->
 
-                    <!-- desde -->
-                    <div class="col-12 col-md-3">
-                        <label class="form-label">Desde</label>
-                        <input type="date" th:field="*{fromDate}" class="form-control">
-                        <div class="text-danger small" th:if="${#fields.hasErrors('fromDate')}" th:errors="*{fromDate}" ></div>
-                    </div>
+<!--                    &lt;!&ndash; desde &ndash;&gt;-->
+<!--                    <div class="col-12 col-md-3">-->
+<!--                        <label class="form-label">Desde</label>-->
+<!--                        <input type="date" th:field="*{fromDate}" class="form-control">-->
+<!--                        <div class="text-danger small" th:if="${#fields.hasErrors('fromDate')}" th:errors="*{fromDate}" ></div>-->
+<!--                    </div>-->
 
-                    <!-- hasta -->
-                    <div class="col-12 col-md-3">
-                        <label class="form-label" >Hasta</label>
-                        <input type="date" th:field="*{toDate}" class="form-control">
-                        <div class="text-danger small" th:if="${#fields.hasErrors('toDate')}" th:errors="*{toDate}" ></div>
-                    </div>
-                </div>
+<!--                    &lt;!&ndash; hasta &ndash;&gt;-->
+<!--                    <div class="col-12 col-md-3">-->
+<!--                        <label class="form-label" >Hasta</label>-->
+<!--                        <input type="date" th:field="*{toDate}" class="form-control">-->
+<!--                        <div class="text-danger small" th:if="${#fields.hasErrors('toDate')}" th:errors="*{toDate}" ></div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <br>
-                <!-- boton de guardar cambios -->
-                <button type="submit" class="btn btn-primary" >Guardar cambios</button>
-                <a th:href="@{/employee/editar/{empNo}(empNo=${employee.empNo})}" class="btn btn-secondary">
-                    Cancelar
-                </a>
-            </form>
-        </div>
-    </div>
+<!--                <br>-->
+<!--                &lt;!&ndash; boton de guardar cambios &ndash;&gt;-->
+<!--                <button type="submit" class="btn btn-primary" >Guardar cambios</button>-->
+<!--                <a th:href="@{/employee/editar/{empNo}(empNo=${employee.empNo})}" class="btn btn-secondary">-->
+<!--                    Cancelar-->
+<!--                </a>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
 
-</div>
-<!-- sin conexion -->
-<div class="modal fade" id="sinInternetModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Sin conexión</h5>
-            </div>
-            <div class="modal-body">
-                Parece que no tienes conexión a internet.
-            </div>
-        </div>
-    </div>
-</div>
-</body>
-<script>
-    const modalInternet = new bootstrap.Modal(document.getElementById('sinInternetModal'));
+<!--</div>-->
+<!--&lt;!&ndash; sin conexion &ndash;&gt;-->
+<!--<div class="modal fade" id="sinInternetModal" tabindex="-1" aria-hidden="true">-->
+<!--    <div class="modal-dialog modal-dialog-centered">-->
+<!--        <div class="modal-content border-0 shadow">-->
+<!--            <div class="modal-header bg-danger text-white">-->
+<!--                <h5 class="modal-title">Sin conexión</h5>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                Parece que no tienes conexión a internet.-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--<script>-->
+<!--    const modalInternet = new bootstrap.Modal(document.getElementById('sinInternetModal'));-->
 
-    function verificarConexion() {
-        if (!navigator.onLine) {
-            modalInternet.show();
-        }
-    }
+<!--    function verificarConexion() {-->
+<!--        if (!navigator.onLine) {-->
+<!--            modalInternet.show();-->
+<!--        }-->
+<!--    }-->
 
-    window.addEventListener('offline', () => {
-        modalInternet.show();
-    });
+<!--    window.addEventListener('offline', () => {-->
+<!--        modalInternet.show();-->
+<!--    });-->
 
-    window.addEventListener('online', () => {
-        modalInternet.hide();
-    });
+<!--    window.addEventListener('online', () => {-->
+<!--        modalInternet.hide();-->
+<!--    });-->
 
-    verificarConexion();
-</script>
-<script th:src="@{/logo.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
-</html>
+<!--    verificarConexion();-->
+<!--</script>-->
+<!--<script th:src="@{/logo.js}"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>-->
+<!--</html>-->

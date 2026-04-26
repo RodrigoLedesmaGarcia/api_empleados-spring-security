@@ -1,12 +1,12 @@
 spring:
   application:
     name: api-empleados
+
   datasource:
-    #url: jdbc:mysql://localhost:3306/employees?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    url: jdbc:mysql://host.docker.internal:3306/employees?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/employees?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: 12345
-    driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -15,6 +15,7 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+
   thymeleaf:
     check-template-location: false
 
@@ -23,7 +24,6 @@ server:
   port: 8081
   ssl:
     enabled: false
-
 
 logging:
   level:

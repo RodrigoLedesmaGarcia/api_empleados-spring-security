@@ -1,134 +1,134 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error 401 - Sin autorización</title>
+<!--<!DOCTYPE html>-->
+<!--<html lang="es">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Error 401 - Sin autorización</title>-->
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-          crossorigin="anonymous">
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"-->
+<!--          rel="stylesheet"-->
+<!--          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"-->
+<!--          crossorigin="anonymous">-->
 
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
+<!--    <style>-->
+<!--        body {-->
+<!--            background-color: #f8f9fa;-->
+<!--        }-->
 
-        .error-container {
-            min-height: 100vh;
-        }
+<!--        .error-container {-->
+<!--            min-height: 100vh;-->
+<!--        }-->
 
-        .error-card {
-            max-width: 900px;
-            width: 100%;
-            border: none;
-            border-radius: 1rem;
-            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
-            background-color: #ffffff;
-        }
+<!--        .error-card {-->
+<!--            max-width: 900px;-->
+<!--            width: 100%;-->
+<!--            border: none;-->
+<!--            border-radius: 1rem;-->
+<!--            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);-->
+<!--            background-color: #ffffff;-->
+<!--        }-->
 
-        .error-image {
-            max-width: 600px;
-            width: 100%;
-            height: auto;
-        }
+<!--        .error-image {-->
+<!--            max-width: 600px;-->
+<!--            width: 100%;-->
+<!--            height: auto;-->
+<!--        }-->
 
-        .error-code {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #6c757d;
-            letter-spacing: 0.5px;
-        }
+<!--        .error-code {-->
+<!--            font-size: 1rem;-->
+<!--            font-weight: 600;-->
+<!--            color: #6c757d;-->
+<!--            letter-spacing: 0.5px;-->
+<!--        }-->
 
-        .error-title {
-            font-weight: 700;
-            color: #212529;
-        }
+<!--        .error-title {-->
+<!--            font-weight: 700;-->
+<!--            color: #212529;-->
+<!--        }-->
 
-        .error-message {
-            color: #495057;
-            max-width: 700px;
-            margin: 0 auto;
-        }
+<!--        .error-message {-->
+<!--            color: #495057;-->
+<!--            max-width: 700px;-->
+<!--            margin: 0 auto;-->
+<!--        }-->
 
-        .btn-custom {
-            min-width: 180px;
-        }
-    </style>
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container-fluid">
+<!--        .btn-custom {-->
+<!--            min-width: 180px;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">-->
+<!--    <div class="container-fluid">-->
 
-        <!-- Logo + título -->
-        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-            <img th:src="@{/images/icono.ico}" width="40" height="40" class="rounded">
-            <span class="fw-semibold">Sistema de empleados</span>
-        </a>
+<!--        &lt;!&ndash; Logo + título &ndash;&gt;-->
+<!--        <a class="navbar-brand d-flex align-items-center gap-2" href="#">-->
+<!--            <img th:src="@{/images/icono.ico}" width="40" height="40" class="rounded">-->
+<!--            <span class="fw-semibold">Sistema de empleados</span>-->
+<!--        </a>-->
 
-        <!-- Botón responsive -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<!--        &lt;!&ndash; Botón responsive &ndash;&gt;-->
+<!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"-->
+<!--                data-bs-target="#navbarNav">-->
+<!--            <span class="navbar-toggler-icon"></span>-->
+<!--        </button>-->
 
-        <!-- Contenido derecho -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="ms-auto d-flex align-items-center gap-3">
+<!--        &lt;!&ndash; Contenido derecho &ndash;&gt;-->
+<!--        <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--            <div class="ms-auto d-flex align-items-center gap-3">-->
 
-                <!-- Usuario -->
-                <span class="text-light small">
-                    👤 <span th:text="${username}"></span>
-                </span>
+<!--                &lt;!&ndash; Usuario &ndash;&gt;-->
+<!--                <span class="text-light small">-->
+<!--                    👤 <span th:text="${username}"></span>-->
+<!--                </span>-->
 
-                <!-- Logout -->
-                <form th:action="@{/logout}" method="post" class="m-0">
-                    <button type="submit" class="btn btn-outline-light btn-sm">
-                        Cerrar sesión
-                    </button>
-                </form>
+<!--                &lt;!&ndash; Logout &ndash;&gt;-->
+<!--                <form th:action="@{/logout}" method="post" class="m-0">-->
+<!--                    <button type="submit" class="btn btn-outline-light btn-sm">-->
+<!--                        Cerrar sesión-->
+<!--                    </button>-->
+<!--                </form>-->
 
-            </div>
-        </div>
+<!--            </div>-->
+<!--        </div>-->
 
-    </div>
-</nav>
-<div class="container d-flex justify-content-center align-items-center error-container py-4">
-    <div class="card error-card">
-        <div class="card-body text-center p-4 p-md-5">
+<!--    </div>-->
+<!--</nav>-->
+<!--<div class="container d-flex justify-content-center align-items-center error-container py-4">-->
+<!--    <div class="card error-card">-->
+<!--        <div class="card-body text-center p-4 p-md-5">-->
 
-            <p class="error-code mb-2">ERROR 401</p>
-            <h1 class="error-title h2 mb-3">Acceso no autorizado</h1>
-            <p class="error-message fs-5 mb-4">
-                No tienes los permisos necesarios para acceder a esta página.
-            </p>
+<!--            <p class="error-code mb-2">ERROR 401</p>-->
+<!--            <h1 class="error-title h2 mb-3">Acceso no autorizado</h1>-->
+<!--            <p class="error-message fs-5 mb-4">-->
+<!--                No tienes los permisos necesarios para acceder a esta página.-->
+<!--            </p>-->
 
-            <img src="/images/errores.jpg"
-                 class="img-fluid error-image mb-4"
-                 alt="Imagen de acceso sin permisos">
+<!--            <img src="/images/errores.jpg"-->
+<!--                 class="img-fluid error-image mb-4"-->
+<!--                 alt="Imagen de acceso sin permisos">-->
 
-            <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-                <button type="button"
-                        class="btn btn-primary btn-custom"
-                        th:onclick="|window.location.href='@{/login}'|">
-                    Regresar al login
-                </button>
+<!--            <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">-->
+<!--                <button type="button"-->
+<!--                        class="btn btn-primary btn-custom"-->
+<!--                        th:onclick="|window.location.href='@{/login}'|">-->
+<!--                    Regresar al login-->
+<!--                </button>-->
 
-                <button type="button"
-                        class="btn btn-outline-secondary btn-custom"
-                        th:onclick="|window.location.href='https://www.google.com'|">
-                    Salir
-                </button>
-            </div>
+<!--                <button type="button"-->
+<!--                        class="btn btn-outline-secondary btn-custom"-->
+<!--                        th:onclick="|window.location.href='https://www.google.com'|">-->
+<!--                    Salir-->
+<!--                </button>-->
+<!--            </div>-->
 
-        </div>
-    </div>
-</div>
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-<script th:src="@{/logo.js}"></script>
-</body>
-</html>
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"-->
+<!--        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"-->
+<!--        crossorigin="anonymous"></script>-->
+<!--<script th:src="@{/logo.js}"></script>-->
+<!--</body>-->
+<!--</html>-->
