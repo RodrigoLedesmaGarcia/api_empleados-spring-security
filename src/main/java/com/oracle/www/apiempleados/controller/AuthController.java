@@ -1,15 +1,11 @@
 package com.oracle.www.apiempleados.controller;
 
 import com.oracle.www.apiempleados.entity.UsuariosLogin;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import com.oracle.www.apiempleados.security.service.TokenService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -19,16 +15,18 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
-    public AuthController(AuthenticationManager authenticationManager) {
+    public AuthController(
+            AuthenticationManager authenticationManager,
+            TokenService tokenService
+    ) {
         this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(
-            @RequestBody UsuariosLogin request,
-            HttpServletRequest httpRequest
-    ) {
+    public ResponseEntity<?> login(@RequestBody UsuariosLogin request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -36,19 +34,22 @@ public class AuthController {
                 )
         );
 
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
+        String token = tokenService.generarToken(authentication);
 
-        HttpSession session = httpRequest.getSession(true);
-        session.setAttribute(
-                HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-                context
-        );
-
-        return ResponseEntity.ok(Map.of("message", "Login correcto"));
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "type", "Bearer",
+                "username", authentication.getName(),
+                "authorities", authentication.getAuthorities()
+        ));
     }
 
-    public record LoginRequest(String username, String password) {
+    @GetMapping("/me")
+    public ResponseEntity<?> me(Authentication authentication) {
+        return ResponseEntity.ok(Map.of(
+                "authenticated", true,
+                "username", authentication.getName(),
+                "authorities", authentication.getAuthorities()
+        ));
     }
 }

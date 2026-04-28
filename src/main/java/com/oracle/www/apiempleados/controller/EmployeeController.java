@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -18,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/employee")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class EmployeeController {
 
     private final EmployeeServiceImpl service;
@@ -108,7 +108,7 @@ public class EmployeeController {
         ));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/eliminar/{empNo}")
     public ResponseEntity<?> eliminarEmpleado(@PathVariable Integer empNo) {
         service.eliminarEmpleado(empNo);

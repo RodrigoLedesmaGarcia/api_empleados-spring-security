@@ -3,7 +3,8 @@ spring:
     name: api-empleados
 
   datasource:
-    url: jdbc:mysql://localhost:3306/employees?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    #url: jdbc:mysql://localhost:3306/employees?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://host.docker.internal:3306/employees?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: 12345
 
@@ -24,6 +25,12 @@ server:
   port: 8081
   ssl:
     enabled: false
+
+jwt:
+  private:
+    key: classpath:private.pem
+  public:
+    key: classpath:public.pem
 
 logging:
   level:
