@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -39,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/favicon.ico").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/employee/buscar").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/employee/editar/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/employee/editar/**").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/employee/nuevo").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/employee/editar").hasAuthority("ROLE_ADMIN")
@@ -52,9 +53,9 @@ public class SecurityConfig {
                                 jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
                         )
                 )
-                .formLogin(form -> form.disable())
-                .httpBasic(httpBasic -> httpBasic.disable())
-                .logout(logout -> logout.disable());
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable);
 
         return http.build();
     }

@@ -3,10 +3,9 @@ spring:
     name: api-empleados
 
   datasource:
-    #url: jdbc:mysql://localhost:3306/employees?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    url: jdbc:mysql://host.docker.internal:3306/employees?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: 12345
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -17,24 +16,12 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
 
-  thymeleaf:
-    check-template-location: false
-
 server:
   address: 0.0.0.0
   port: 8081
-  ssl:
-    enabled: false
 
 jwt:
   private:
-    key: classpath:private.pem
+    key: ${JWT_PRIVATE_KEY}
   public:
-    key: classpath:public.pem
-
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-    root: INFO
+    key: ${JWT_PUBLIC_KEY}
