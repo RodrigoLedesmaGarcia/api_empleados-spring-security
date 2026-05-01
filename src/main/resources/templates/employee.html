@@ -6,6 +6,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </head>
+<style>
+    .custom-modal-size {
+        max-width: none; /* rompe el límite de Bootstrap */
+        width: 1800px;
+        height: 900px;
+    }
+
+    .img-modal {
+        width: 1800px;
+        height: 900px;
+        object-fit: cover;
+    }
+</style>
 <body>
 <!-- navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
@@ -236,7 +249,54 @@
         </div>
     </div>
 </div>
+<!-- Modal por inactividad -->
+<div class="modal fade" id="inactividadModal" tabindex="-1"
+     aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+
+    <div class="modal-dialog modal-dialog-centered custom-modal-size">
+        <div class="modal-content border-0 rounded-0 bg-dark">
+            <div class="modal-body p-0">
+                <img th:src="@{/images/foto.jpg}"
+                     alt="¿Estás aún ahí?"
+                     class="img-modal">
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+<script>
+    const modalInactividad = new bootstrap.Modal(
+        document.getElementById('inactividadModal')
+    );
+
+    let tiempoInactividad;
+    let modalAbierto = false;
+
+    const TIEMPO_LIMITE = 180000;
+
+    function reiniciarTemporizador() {
+        clearTimeout(tiempoInactividad);
+
+        if (modalAbierto) {
+            modalInactividad.hide();
+            modalAbierto = false;
+        }
+
+        tiempoInactividad = setTimeout(() => {
+            modalInactividad.show();
+            modalAbierto = true;
+        }, TIEMPO_LIMITE);
+    }
+
+    document.addEventListener('mousemove', reiniciarTemporizador);
+    document.addEventListener('keydown', reiniciarTemporizador);
+    document.addEventListener('click', reiniciarTemporizador);
+    document.addEventListener('scroll', reiniciarTemporizador);
+    document.addEventListener('touchstart', reiniciarTemporizador);
+
+    reiniciarTemporizador();
+</script>
 <script>
     const modalInternet = new bootstrap.Modal(document.getElementById('sinInternetModal'));
 
