@@ -35,6 +35,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
@@ -65,7 +66,11 @@ public class SecurityConfig {
         JwtGrantedAuthoritiesConverter authoritiesConverter =
                 new JwtGrantedAuthoritiesConverter();
 
-        authoritiesConverter.setAuthoritiesClaimName("scope");
+        // Debe coincidir con:
+        // .claim("authorities", roles)
+        authoritiesConverter.setAuthoritiesClaimName("authorities");
+
+        // Como tus roles ya vienen como ROLE_ADMIN, no agregues prefijo extra.
         authoritiesConverter.setAuthorityPrefix("");
 
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();

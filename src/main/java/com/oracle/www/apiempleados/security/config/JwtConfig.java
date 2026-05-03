@@ -2,6 +2,7 @@ package com.oracle.www.apiempleados.security.config;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -19,22 +20,16 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.UUID;
 
 @Configuration
 public class JwtConfig {
 
     @Bean
     public RSAPrivateKey privateKey() throws Exception {
-        String key = System.getenv("JWT_PRIVATE_KEY");
+        String key = getRequiredEnv("JWT_PRIVATE_KEY");
 
-        if (key == null || key.isBlank()) {
-            throw new IllegalStateException("JWT_PRIVATE_KEY no está configurada");
-        }
-
-        key = key
-                .replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "")
-                .replaceAll("\\s", "");
+        key = cleanPrivateKey(key);
 
         byte[] decoded = Base64.getDecoder().decode(key);
 
@@ -46,16 +41,9 @@ public class JwtConfig {
 
     @Bean
     public RSAPublicKey publicKey() throws Exception {
-        String key = System.getenv("JWT_PUBLIC_KEY");
+        String key = getRequiredEnv("JWT_PUBLIC_KEY");
 
-        if (key == null || key.isBlank()) {
-            throw new IllegalStateException("JWT_PUBLIC_KEY no está configurada");
-        }
-
-        key = key
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "")
-                .replaceAll("\\s", "");
+        key = cleanPublicKey(key);
 
         byte[] decoded = Base64.getDecoder().decode(key);
 
@@ -69,6 +57,8 @@ public class JwtConfig {
     public JwtEncoder jwtEncoder(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
         JWK jwk = new RSAKey.Builder(publicKey)
                 .privateKey(privateKey)
+                .keyUse(KeyUse.SIGNATURE)
+                .keyID(UUID.randomUUID().toString())
                 .build();
 
         JWKSource<SecurityContext> jwkSource =
@@ -80,5 +70,29 @@ public class JwtConfig {
     @Bean
     public JwtDecoder jwtDecoder(RSAPublicKey publicKey) {
         return NimbusJwtDecoder.withPublicKey(publicKey).build();
+    }
+
+    private String getRequiredEnv(String name) {
+        String value = System.getenv(name);
+
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException(name + " no está configurada");
+        }
+
+        return value;
+    }
+
+    private String cleanPrivateKey(String key) {
+        return key
+                .replace("-----BEGIN PRIVATE KEY-----", "")
+                .replace("-----END PRIVATE KEY-----", "")
+                .replaceAll("\\s", "");
+    }
+
+    private String cleanPublicKey(String key) {
+        return key
+                .replace("-----BEGIN PUBLIC KEY-----", "")
+                .replace("-----END PUBLIC KEY-----", "")
+                .replaceAll("\\s", "");
     }
 }
