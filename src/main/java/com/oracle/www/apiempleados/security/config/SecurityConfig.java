@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/favicon.ico").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/employee/buscar").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/employee/editar/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/employee/editar/**").hasAuthority("ROLE_ADMIN")
 
                         .requestMatchers(HttpMethod.POST, "/employee/nuevo").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/employee/editar").hasAuthority("ROLE_ADMIN")
